@@ -1,20 +1,25 @@
-function Person(firstName, lastName) {
-	this.firstName = firstName;
-	this.lastName = lastName;
-
-	// Increased Memory usage since every object has its own method
-	// this.sayName = function() {
-	// 	return "My name is " + this.firstName + " " + this.lastName;
-	// };
+function Beverage(name, temperature) {
+	this.name = name;
+	this.temperature = temperature;
 }
 
-// Better, only own one shared with every object
-Person.prototype.sayName = function() {
-	return "My name is " + this.firstName + " " + this.lastName;
+Beverage.prototype.drink = function() {
+	console.log("I'm drinking " + this.name);
 };
 
-var johnDoe = new Person("John", "Doe");
-var janeDoe = new Person("Jane", "Doe");
+function Coffee(type) {
+	Beverage.call(this, 'coffee', 'hot');
+	this.type = type;
+}
 
-var isPerson = johnDoe instanceof Person; //true
-var isSame = johnDoe.sayName === janeDoe.sayName; //true
+Coffee.prototype = Object.create(Beverage.prototype);
+Coffee.prototype.sip = function() {
+	console.log('Sipping some awesome ' + this.type + ' ' + this.name);
+};
+
+var water = new Beverage('water', 'cold');
+var coffee = new Coffee('bold dark roast');
+
+//water.drink(); 	-> I'm drinking water
+//coffee.drink(); 	-> I'm drinking coffee
+//coffee.sip();   	-> Sipping some awesome bold dard roast coffee
