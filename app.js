@@ -1,25 +1,53 @@
-function Beverage(name, temperature) {
+function extend(target) {
+    if (!arguments[1]) {
+        return;
+    }
+
+    for (var ii = 1, ll = arguments.length; ii < ll; ii++) {
+        var source = arguments[ii];
+
+        for (var prop in source) {
+            if (!target[prop] && source.hasOwnProperty(prop)) {
+                target[prop] = source[prop];
+            }
+        }
+    }
+}
+
+function Person(name) {
 	this.name = name;
-	this.temperature = temperature;
 }
 
-Beverage.prototype.drink = function() {
-	console.log("I'm drinking " + this.name);
-};
-
-function Coffee(type) {
-	Beverage.call(this, 'coffee', 'hot');
-	this.type = type;
+function Dog(name) {
+	this.name = name;
 }
 
-Coffee.prototype = Object.create(Beverage.prototype);
-Coffee.prototype.sip = function() {
-	console.log('Sipping some awesome ' + this.type + ' ' + this.name);
+var speaker = {
+	speak: function () {
+		return this.name + ' is speaking.';
+	}
 };
 
-var water = new Beverage('water', 'cold');
-var coffee = new Coffee('bold dark roast');
+var mover = {
+	walk: function () {
+		return this.name + ' is walking.';
+	},
+	run: function () {
+		return this.name + ' is running.';
+	}
+};
 
-//water.drink(); 	-> I'm drinking water
-//coffee.drink(); 	-> I'm drinking coffee
-//coffee.sip();   	-> Sipping some awesome bold dard roast coffee
+var arithmetic = {
+	add: function () {
+		return this.name + ' is adding numbers together.';
+	},
+	multiply: function () {
+		return this.name + ' is multiplying numbers together.';
+	}
+};
+
+extend(Person.prototype, speaker, mover, arithmetic);
+extend(Dog.prototype, speaker, mover);
+
+var john = new Person("John Doe");
+var fido = new Dog("Fido");
