@@ -1,19 +1,14 @@
-function addEvent(el, ev, fn) {
-	if (el.addEventListener) {
-		el.addEventListener(ev, fn, false);
-	} else if (el.attachEvent){
-		el.attachEvent('on' + ev, fn);
-	} else {
-		el['on' + ev] = fn;
-	}
-}
+require(['eventmanager'], function(evtman) {
 
-function removeEvent(el, ev, fn) {
-	if (el.removeEventListener) {
-		el.removeEventListener(ev, fn, false);
-	} else if (el.detachEvent){
-		el.detachEvent('on' + ev, fn);
-	} else {
-		el['on' + ev] = null;
+	function foo(evt) {
+		console.log(evt.message);
 	}
-}
+
+	evtman.subscribe('test/foo', foo);
+
+	evtman.publish('test/foo', { message: 'Hello, this is a custom event' });
+
+	evtman.unsubscribe('test/foo', foo);
+
+	evtman.publish('test/foo', { message: 'this should not be seen' });
+});
